@@ -74,7 +74,24 @@ public class SandLab
     //int someRandom = (int) (Math.random() * scalar)
     //remember that you need to watch for the edges of the array
     
+	  int randomRow = (int)(Math.random() * grid.length);
+	  int randomCol = (int)(Math.random() * grid[0].length);
+	  
+	  if (grid[randomRow][randomCol] == SAND)
+	  {
+		  if (randomRow + 1 < grid.length && grid[randomRow + 1][randomCol] == EMPTY)
+		  {
+			  swapParticles(randomRow, randomCol, randomRow + 1, randomCol);
+		  }
+	  }
     
+  }
+  
+  private void swapParticles(int rowOne, int colOne, int rowTwo, int colTwo)
+  {
+	  int tool = grid[rowOne][colOne];
+	  grid[rowOne][colOne] = grid[rowTwo][colTwo];
+	  grid[rowTwo][colTwo] = tool;
   }
   
   //do not modify this method!
