@@ -43,6 +43,14 @@ public class SandLab
   private void locationClicked(int row, int col, int tool)
   {
     //2. Assign the values associated with the parameters to the grid
+	  int rowIndex = (int)row / grid.length;
+	  int colIndex = (int)col / grid[0].length;
+	  
+	  if (rowIndex >= 0 && rowIndex < grid.length
+			  && colIndex >= 0 && colIndex < grid[0].length)
+	  {
+		  grid[rowIndex][colIndex] = tool;
+	  }
    
   }
 
