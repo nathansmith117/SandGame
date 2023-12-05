@@ -65,6 +65,41 @@ public class SandLab
 	  }
     
   }
+  
+  public void updateSand(int currentX, int currentY)
+  {
+	  if (currentX + 1 < grid.length && (grid[currentX + 1][currentY] == EMPTY || grid[currentX + 1][currentY] == WATER))
+	  {
+		  swapParticles(currentX, currentY, currentX + 1, currentY);
+	  }
+  }
+  
+  public void updateWater(int currentX, int currentY)
+  {
+	  int waterDirection = (int)(Math.random() * 3);
+	  
+	  if (waterDirection == 0)
+	  {
+		  if (currentX + 1 < grid.length && grid[currentX + 1][currentY] == EMPTY)
+		  {
+			  swapParticles(currentX, currentY, currentX + 1, currentY);
+		  }
+	  }
+	  else if (waterDirection == 1)
+	  {
+		  if (currentY - 1 >= 0 && grid[currentX][currentY - 1] == EMPTY)
+		  {
+			  swapParticles(currentX, currentY, currentX, currentY - 1);
+		  }
+	  }
+	  else
+	  {
+		  if (currentY + 1 < grid[0].length && grid[currentX][currentY + 1] == EMPTY)
+		  {
+			  swapParticles(currentX, currentY, currentX, currentY + 1);
+		  }
+	  }
+  }
 
   //Step 5,7
   //called repeatedly.
@@ -81,36 +116,11 @@ public class SandLab
 	  
 	  if (grid[randomRow][randomCol] == SAND)
 	  {
-		  if (randomRow + 1 < grid.length && (grid[randomRow + 1][randomCol] == EMPTY || grid[randomRow + 1][randomCol] == WATER))
-		  {
-			  swapParticles(randomRow, randomCol, randomRow + 1, randomCol);
-		  }
+		  updateSand(randomRow, randomCol);
 	  }
 	  else if (grid[randomRow][randomCol] == WATER)
 	  {
-		  int waterDirection = (int)(Math.random() * 3);
-		  
-		  if (waterDirection == 0)
-		  {
-			  if (randomRow + 1 < grid.length && grid[randomRow + 1][randomCol] == EMPTY)
-			  {
-				  swapParticles(randomRow, randomCol, randomRow + 1, randomCol);
-			  }
-		  }
-		  else if (waterDirection == 1)
-		  {
-			  if (randomCol - 1 >= 0 && grid[randomRow][randomCol - 1] == EMPTY)
-			  {
-				  swapParticles(randomRow, randomCol, randomRow, randomCol - 1);
-			  }
-		  }
-		  else
-		  {
-			  if (randomCol + 1 < grid[0].length && grid[randomRow][randomCol + 1] == EMPTY)
-			  {
-				  swapParticles(randomRow, randomCol, randomRow, randomCol + 1);
-			  }
-		  }
+		 updateWater(randomRow, randomCol);
 	  }
   }
   
