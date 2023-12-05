@@ -114,13 +114,15 @@ public class SandLab
 	  int randomRow = currentX ^ currentY % grid.length;
 	  int randomCol = randomRow ^ currentX % grid[0].length;
 	  
-	  while (Math.hypot(currentX - randomCol, currentY - randomRow) <= 4)
+	  while (Math.hypot(currentX - randomCol, currentY - randomRow) <= 6)
 	  {
 		  randomRow += (randomCol % 3);
 		  randomCol += (randomRow % 3);
 		  
-		  randomRow %= grid.length;
-		  randomCol %= grid[0].length;
+		  randomRow %= grid.length - 4;
+		  randomCol %= grid[0].length - 4;
+		  randomRow += 2;
+		  randomCol += 2;
 	  }
 	  
 	  for (int y : positions)
