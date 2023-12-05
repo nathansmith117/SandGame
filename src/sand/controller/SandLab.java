@@ -13,6 +13,7 @@ public class SandLab
   public static final int METAL = 1;
   public static final int SAND = 2;
   public static final int WATER = 3;
+  public static final int PORTAL = 4;
   
   //do not add any more fields below
   private int[][] grid;
@@ -29,12 +30,13 @@ public class SandLab
     String[] names;
     // Change this value to add more buttons
     //Step 4,6
-    names = new String[4];
+    names = new String[5];
     // Each value needs a name for the button
     names[EMPTY] = "Empty";
     names[METAL] = "Metal";
     names[SAND] = "Sand";
     names[WATER] = "Water";
+    names[PORTAL] = "Portal";
     
     //1. Add code to initialize the data member grid with same dimensions
     grid = new int[numRows][numCols];
@@ -59,7 +61,7 @@ public class SandLab
 	  {
 		  for (int col = 0; col < grid[0].length; col++)
 		  {
-			  Color [] colors = {Color.black, Color.gray, new Color(194, 178, 128), Color.blue};
+			  Color [] colors = {Color.black, Color.gray, new Color(194, 178, 128), Color.blue, Color.pink};
 			  display.setColor(row, col, colors[grid[row][col]]);
 		  }
 	  }
@@ -68,9 +70,9 @@ public class SandLab
   
   public void updateSand(int currentX, int currentY)
   {
-	  if (currentX + 1 < grid.length && (grid[currentX + 1][currentY] == EMPTY || grid[currentX + 1][currentY] == WATER))
+	  if (currentY + 1 < grid.length && (grid[currentY + 1][currentX] == EMPTY || grid[currentY + 1][currentX] == WATER))
 	  {
-		  swapParticles(currentX, currentY, currentX + 1, currentY);
+		  swapParticles(currentY, currentX, currentY + 1, currentX);
 	  }
   }
   
@@ -80,23 +82,78 @@ public class SandLab
 	  
 	  if (waterDirection == 0)
 	  {
-		  if (currentX + 1 < grid.length && grid[currentX + 1][currentY] == EMPTY)
+		  if (currentY + 1 < grid.length && grid[currentY + 1][currentX] == EMPTY)
 		  {
-			  swapParticles(currentX, currentY, currentX + 1, currentY);
+			  swapParticles(currentY, currentX, currentY + 1, currentX);
 		  }
 	  }
 	  else if (waterDirection == 1)
 	  {
-		  if (currentY - 1 >= 0 && grid[currentX][currentY - 1] == EMPTY)
+		  if (currentX - 1 >= 0 && grid[currentY][currentX - 1] == EMPTY)
 		  {
-			  swapParticles(currentX, currentY, currentX, currentY - 1);
+			  swapParticles(currentY, currentX, currentY, currentX - 1);
 		  }
 	  }
 	  else
 	  {
-		  if (currentY + 1 < grid[0].length && grid[currentX][currentY + 1] == EMPTY)
+		  if (currentX + 1 < grid[0].length && grid[currentY][currentX + 1] == EMPTY)
 		  {
-			  swapParticles(currentX, currentY, currentX, currentY + 1);
+			  swapParticles(currentY, currentX, currentY, currentX + 1);
+		  }
+	  }
+  }
+  
+  public void updatePortal(int currentX, int currentY)
+  {
+	  int[] positions = {-1, 0, 1};
+	  
+	  //int randomRow = (int)(Math.random() * grid.length);
+	  //int randomCol = (int)(Math.random() * grid[0].length);
+	  
+	  // Funny little generator.
+	  int randomRow = currentX ^ currentY % grid.length;
+	  int randomCol = randomRow ^ currentX % grid[0].length;
+	  
+	  while (Math.hypot(currentX - randomCol, currentY - randomRow) <= 4)
+	  {
+		  randomRow += (randomCol % 3);
+		  randomCol += (randomRow % 3);
+		  
+		  randomRow %= grid.length;
+		  randomCol %= grid[0].length;
+	  }
+	  
+	  for (int y : positions)
+	  {
+		  for (int x : positions)
+		  {
+			  int row = y + currentY;
+			  int col = x + currentX;
+			  
+			  if (x == 0 && y == 0)
+			  {
+				  continue;
+			  }
+			  
+			  // Out of bounds.
+			  if (row >= grid.length || row < 0 || col >= grid[0].length || col < 0)
+			  {
+				  continue;
+			  }
+			  
+			  if (grid[row][col] != EMPTY)
+			  {
+				  
+				  int outRow = randomRow + y;
+				  int outCol = randomCol + x;
+				  
+				  if (outRow < grid.length && outRow >= 0 && outCol < grid[0].length && outCol >= 0)
+				  {
+					  grid[outRow][outCol] = grid[row][col];
+				  }
+				  
+				  grid[row][col] = EMPTY;
+			  }
 		  }
 	  }
   }
@@ -116,11 +173,15 @@ public class SandLab
 	  
 	  if (grid[randomRow][randomCol] == SAND)
 	  {
-		  updateSand(randomRow, randomCol);
+		  updateSand(randomCol, randomRow);
 	  }
 	  else if (grid[randomRow][randomCol] == WATER)
 	  {
-		 updateWater(randomRow, randomCol);
+		  updateWater(randomCol, randomRow);
+	  }
+	  else if (grid[randomRow][randomCol] == PORTAL)
+	  {
+		  updatePortal(randomCol, randomRow);
 	  }
   }
   
