@@ -12,6 +12,7 @@ public class SandLab
   public static final int EMPTY = 0;
   public static final int METAL = 1;
   public static final int SAND = 2;
+  public static final int WATER = 3;
   
   //do not add any more fields below
   private int[][] grid;
@@ -28,11 +29,12 @@ public class SandLab
     String[] names;
     // Change this value to add more buttons
     //Step 4,6
-    names = new String[3];
+    names = new String[4];
     // Each value needs a name for the button
     names[EMPTY] = "Empty";
     names[METAL] = "Metal";
     names[SAND] = "Sand";
+    names[WATER] = "Water";
     
     //1. Add code to initialize the data member grid with same dimensions
     grid = new int[numRows][numCols];
@@ -57,7 +59,7 @@ public class SandLab
 	  {
 		  for (int col = 0; col < grid[0].length; col++)
 		  {
-			  Color [] colors = {Color.black, Color.gray, new Color(194, 178, 128)};
+			  Color [] colors = {Color.black, Color.gray, new Color(194, 178, 128), Color.blue};
 			  display.setColor(row, col, colors[grid[row][col]]);
 		  }
 	  }
@@ -79,12 +81,37 @@ public class SandLab
 	  
 	  if (grid[randomRow][randomCol] == SAND)
 	  {
-		  if (randomRow + 1 < grid.length && grid[randomRow + 1][randomCol] == EMPTY)
+		  if (randomRow + 1 < grid.length && (grid[randomRow + 1][randomCol] == EMPTY || grid[randomRow + 1][randomCol] == WATER))
 		  {
 			  swapParticles(randomRow, randomCol, randomRow + 1, randomCol);
 		  }
 	  }
-    
+	  else if (grid[randomRow][randomCol] == WATER)
+	  {
+		  int waterDirection = (int)(Math.random() * 3);
+		  
+		  if (waterDirection == 0)
+		  {
+			  if (randomRow + 1 < grid.length && grid[randomRow + 1][randomCol] == EMPTY)
+			  {
+				  swapParticles(randomRow, randomCol, randomRow + 1, randomCol);
+			  }
+		  }
+		  else if (waterDirection == 1)
+		  {
+			  if (randomCol - 1 >= 0 && grid[randomRow][randomCol - 1] == EMPTY)
+			  {
+				  swapParticles(randomRow, randomCol, randomRow, randomCol - 1);
+			  }
+		  }
+		  else
+		  {
+			  if (randomCol + 1 < grid[0].length && grid[randomRow][randomCol + 1] == EMPTY)
+			  {
+				  swapParticles(randomRow, randomCol, randomRow, randomCol + 1);
+			  }
+		  }
+	  }
   }
   
   private void swapParticles(int rowOne, int colOne, int rowTwo, int colTwo)
