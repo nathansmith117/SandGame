@@ -14,6 +14,7 @@ public class SandLab
   public static final int SAND = 2;
   public static final int WATER = 3;
   public static final int PORTAL = 4;
+  public static final int FLOW = 5;
   
   //do not add any more fields below
   private int[][] grid;
@@ -30,13 +31,14 @@ public class SandLab
     String[] names;
     // Change this value to add more buttons
     //Step 4,6
-    names = new String[5];
+    names = new String[6];
     // Each value needs a name for the button
     names[EMPTY] = "Empty";
     names[METAL] = "Metal";
     names[SAND] = "Sand";
     names[WATER] = "Water";
     names[PORTAL] = "Portal";
+    names[FLOW] = "Flow";
     
     //1. Add code to initialize the data member grid with same dimensions
     grid = new int[numRows][numCols];
@@ -61,7 +63,7 @@ public class SandLab
 	  {
 		  for (int col = 0; col < grid[0].length; col++)
 		  {
-			  Color [] colors = {Color.black, Color.gray, new Color(194, 178, 128), Color.blue, Color.pink};
+			  Color [] colors = {Color.black, Color.gray, new Color(194, 178, 128), Color.blue, Color.pink, Color.lightGray};
 			  display.setColor(row, col, colors[grid[row][col]]);
 		  }
 	  }
@@ -159,6 +161,25 @@ public class SandLab
 		  }
 	  }
   }
+  
+  public void updateFlow(int currentX, int currentY)
+  { 
+	  if (currentY + 1 < grid.length && grid[currentY + 1][currentX] == EMPTY)
+	  {
+		  grid[currentY + 1][currentX] = FLOW;
+	  }
+	  else if (currentY + 1 >= grid.length || (grid[currentY + 1][currentX] != EMPTY && grid[currentY + 1][currentX] != FLOW))
+	  {
+		  if (currentX + 1 < grid[0].length && grid[currentY][currentX + 1] == EMPTY)
+		  {
+			  grid[currentY][currentX + 1] = FLOW;
+		  }
+		  if (currentX - 1 >= 0 && grid[currentY][currentX - 1] == EMPTY)
+		  {
+			  grid[currentY][currentX - 1] = FLOW;
+		  }
+	  }
+  }
 
   //Step 5,7
   //called repeatedly.
@@ -184,6 +205,10 @@ public class SandLab
 	  else if (grid[randomRow][randomCol] == PORTAL)
 	  {
 		  updatePortal(randomCol, randomRow);
+	  }
+	  else if (grid[randomRow][randomCol] == FLOW)
+	  {
+		  updateFlow(randomCol, randomRow);
 	  }
   }
   
