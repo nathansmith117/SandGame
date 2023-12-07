@@ -269,7 +269,7 @@ public class SandLab
 				  continue;
 			  }
 			  
-			  if (grid[row][col] != EMPTY && grid[row][col] != BREAKER)
+			  if (grid[row][col] != EMPTY && grid[row][col] != BREAKER && grid[row][col] != SPREADER)
 			  {
 				  grid[row][col] = grid[currentY][currentX];
 				  nothingNear = false;
@@ -286,6 +286,7 @@ public class SandLab
   public void updateSpreader(int currentX, int currentY)
   {
 	  int[] positions = {-1, 0, 1};
+	  int sidesCovered = 0;
 	  
 	  for (int y : positions)
 	  {
@@ -302,6 +303,7 @@ public class SandLab
 			  // Out of bounds.
 			  if (row >= grid.length || row < 0 || col >= grid[0].length || col < 0)
 			  {
+				  sidesCovered++;
 				  continue;
 			  }
 			  
@@ -309,10 +311,17 @@ public class SandLab
 			  {
 				  grid[row][col] = SPREADER;
 			  }
+			 if (grid[row][col] == SPREADER || grid[row][col] == BECOMER)
+			 {
+				 sidesCovered++;
+			 }
 		  }
 	  }
 	  
-	  grid[currentY][currentX] = BECOMER;
+	  if (sidesCovered == 8)
+	  {
+		  grid[currentY][currentX] = BECOMER;
+	  }
   }
 
   //Step 5,7
