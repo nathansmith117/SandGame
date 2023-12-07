@@ -307,7 +307,7 @@ public class SandLab
 				  continue;
 			  }
 			  
-			  if (grid[row][col] == EMPTY)
+			  if (grid[row][col] == EMPTY && (x == 0 || y == 0))
 			  {
 				  grid[row][col] = SPREADER;
 			  }
