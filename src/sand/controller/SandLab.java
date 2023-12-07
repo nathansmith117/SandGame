@@ -16,6 +16,7 @@ public class SandLab
   public static final int PORTAL = 4;
   public static final int FLOW = 5;
   public static final int BECOMER = 6;
+  public static final int BREAKER = 7;
   
   //do not add any more fields below
   private int[][] grid;
@@ -32,7 +33,7 @@ public class SandLab
     String[] names;
     // Change this value to add more buttons
     //Step 4,6
-    names = new String[7];
+    names = new String[8];
     // Each value needs a name for the button
     names[EMPTY] = "Empty";
     names[METAL] = "Metal";
@@ -41,6 +42,7 @@ public class SandLab
     names[PORTAL] = "Portal";
     names[FLOW] = "Flow";
     names[BECOMER] = "Becomer";
+    names[BREAKER] = "Breaker";
     
     //1. Add code to initialize the data member grid with same dimensions
     grid = new int[numRows][numCols];
@@ -65,7 +67,7 @@ public class SandLab
 	  {
 		  for (int col = 0; col < grid[0].length; col++)
 		  {
-			  Color [] colors = {Color.black, Color.gray, new Color(194, 178, 128), Color.blue, Color.pink, Color.lightGray, Color.orange};
+			  Color [] colors = {Color.black, Color.gray, new Color(194, 178, 128), Color.blue, Color.pink, Color.lightGray, Color.orange, Color.red};
 			  display.setColor(row, col, colors[grid[row][col]]);
 		  }
 	  }
@@ -240,6 +242,44 @@ public class SandLab
 		  }
 	  }
   }
+  
+  public void updateBreaker(int currentX, int currentY)
+  {
+	  int[] positions = {-1, 0, 1};
+	  
+	  boolean nothingNear = true;
+	  
+	  for (int y : positions)
+	  {
+		  for (int x : positions)
+		  {
+			  if (x == 0 && y == 0)
+			  {
+				  continue;
+			  }
+	  
+			  int row = y + currentY;
+			  int col = x + currentX;
+			  
+			  // Out of bounds.
+			  if (row >= grid.length || row < 0 || col >= grid[0].length || col < 0)
+			  {
+				  continue;
+			  }
+			  
+			  if (grid[row][col] != EMPTY && grid[row][col] != BREAKER)
+			  {
+				  grid[row][col] = grid[currentY][currentX];
+				  nothingNear = false;
+			  }
+		  }
+	  }
+	  
+	  if (nothingNear)
+	  {
+		  grid[currentY][currentX] = EMPTY;
+	  }
+  }
 
   //Step 5,7
   //called repeatedly.
@@ -273,6 +313,10 @@ public class SandLab
 	  else if (grid[randomRow][randomCol] == BECOMER)
 	  {
 		  updateBecomer(randomCol, randomRow);
+	  }
+	  else if (grid[randomRow][randomCol] == BREAKER)
+	  {
+		  updateBreaker(randomCol, randomRow);
 	  }
   }
   
