@@ -84,21 +84,21 @@ public class SandLab
 	  
 	  if (waterDirection == 0)
 	  {
-		  if (currentY + 1 < grid.length && grid[currentY + 1][currentX] == EMPTY)
+		  if (currentY + 1 < grid.length && (grid[currentY + 1][currentX] == EMPTY || grid[currentY + 1][currentX] == FLOW))
 		  {
 			  swapParticles(currentY, currentX, currentY + 1, currentX);
 		  }
 	  }
 	  else if (waterDirection == 1)
 	  {
-		  if (currentX - 1 >= 0 && grid[currentY][currentX - 1] == EMPTY)
+		  if (currentX - 1 >= 0 && (grid[currentY][currentX - 1] == EMPTY || grid[currentY][currentX - 1] == FLOW))
 		  {
 			  swapParticles(currentY, currentX, currentY, currentX - 1);
 		  }
 	  }
 	  else
 	  {
-		  if (currentX + 1 < grid[0].length && grid[currentY][currentX + 1] == EMPTY)
+		  if (currentX + 1 < grid[0].length && (grid[currentY][currentX + 1] == EMPTY || grid[currentY][currentX + 1] == FLOW))
 		  {
 			  swapParticles(currentY, currentX, currentY, currentX + 1);
 		  }
