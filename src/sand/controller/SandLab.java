@@ -15,6 +15,7 @@ public class SandLab
   public static final int WATER = 3;
   public static final int PORTAL = 4;
   public static final int FLOW = 5;
+  public static final int BECOMER = 6;
   
   //do not add any more fields below
   private int[][] grid;
@@ -31,7 +32,7 @@ public class SandLab
     String[] names;
     // Change this value to add more buttons
     //Step 4,6
-    names = new String[6];
+    names = new String[7];
     // Each value needs a name for the button
     names[EMPTY] = "Empty";
     names[METAL] = "Metal";
@@ -39,6 +40,7 @@ public class SandLab
     names[WATER] = "Water";
     names[PORTAL] = "Portal";
     names[FLOW] = "Flow";
+    names[BECOMER] = "Becomer";
     
     //1. Add code to initialize the data member grid with same dimensions
     grid = new int[numRows][numCols];
@@ -63,7 +65,7 @@ public class SandLab
 	  {
 		  for (int col = 0; col < grid[0].length; col++)
 		  {
-			  Color [] colors = {Color.black, Color.gray, new Color(194, 178, 128), Color.blue, Color.pink, Color.lightGray};
+			  Color [] colors = {Color.black, Color.gray, new Color(194, 178, 128), Color.blue, Color.pink, Color.lightGray, Color.orange};
 			  display.setColor(row, col, colors[grid[row][col]]);
 		  }
 	  }
@@ -208,6 +210,36 @@ public class SandLab
 		  }
 	  }
   }
+  
+  public void updateBecomer(int currentX, int currentY)
+  {
+	  int[] positions = {-1, 0, 1};
+	  
+	  for (int y : positions)
+	  {
+		  for (int x : positions)
+		  {
+			  if (x == 0 && y == 0)
+			  {
+				  continue;
+			  }
+	  
+			  int row = y + currentY;
+			  int col = x + currentX;
+			  
+			  // Out of bounds.
+			  if (row >= grid.length || row < 0 || col >= grid[0].length || col < 0)
+			  {
+				  continue;
+			  }
+			  
+			  if (grid[row][col] != EMPTY && grid[row][col] != BECOMER)
+			  {
+				  grid[currentY][currentX] = grid[row][col];
+			  }
+		  }
+	  }
+  }
 
   //Step 5,7
   //called repeatedly.
@@ -237,6 +269,10 @@ public class SandLab
 	  else if (grid[randomRow][randomCol] == FLOW)
 	  {
 		  updateFlow(randomCol, randomRow);
+	  }
+	  else if (grid[randomRow][randomCol] == BECOMER)
+	  {
+		  updateBecomer(randomCol, randomRow);
 	  }
   }
   
