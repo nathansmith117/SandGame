@@ -84,21 +84,21 @@ public class SandLab
 	  
 	  if (waterDirection == 0)
 	  {
-		  if (currentY + 1 < grid.length && (grid[currentY + 1][currentX] == EMPTY || grid[currentY + 1][currentX] == FLOW))
+		  if (currentY + 1 < grid.length && grid[currentY + 1][currentX] == EMPTY)
 		  {
 			  swapParticles(currentY, currentX, currentY + 1, currentX);
 		  }
 	  }
 	  else if (waterDirection == 1)
 	  {
-		  if (currentX - 1 >= 0 && (grid[currentY][currentX - 1] == EMPTY || grid[currentY][currentX - 1] == FLOW))
+		  if (currentX - 1 >= 0 && grid[currentY][currentX - 1] == EMPTY)
 		  {
 			  swapParticles(currentY, currentX, currentY, currentX - 1);
 		  }
 	  }
 	  else
 	  {
-		  if (currentX + 1 < grid[0].length && (grid[currentY][currentX + 1] == EMPTY || grid[currentY][currentX + 1] == FLOW))
+		  if (currentX + 1 < grid[0].length && grid[currentY][currentX + 1] == EMPTY)
 		  {
 			  swapParticles(currentY, currentX, currentY, currentX + 1);
 		  }
@@ -177,6 +177,34 @@ public class SandLab
 		  if (currentX - 1 >= 0 && grid[currentY][currentX - 1] == EMPTY)
 		  {
 			  grid[currentY][currentX - 1] = FLOW;
+		  }
+	  }
+	  
+	  // Turn water into flow.
+	  int[] positions = {-1, 0, 1};
+	  
+	  for (int y : positions)
+	  {
+		  for (int x : positions)
+		  {
+			  if (x == 0 && y == 0)
+			  {
+				  continue;
+			  }
+			  
+			  int row = y + currentY;
+			  int col = x + currentX;
+			  
+			  // Out of bounds.
+			  if (row >= grid.length || row < 0 || col >= grid[0].length || col < 0)
+			  {
+				  continue;
+			  }
+			  
+			  if (grid[row][col] == WATER)
+			  {
+				  grid[row][col] = FLOW;
+			  }
 		  }
 	  }
   }
